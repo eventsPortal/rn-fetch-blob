@@ -575,6 +575,19 @@ RCT_EXPORT_METHOD(previewDocument:(NSString*)uri scheme:(NSString *)scheme resol
     }
 }
 
+// method for 
+RCT_EXPORT_METHOD(dismissMenu)
+{
+    if (documentController) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [documentController  dismissMenuAnimated:NO];
+        });
+         dispatch_sync(dispatch_get_main_queue(), ^{
+            [documentController  dismissPreviewAnimated:NO];
+        });
+    }
+}
+
 # pragma mark - open file with UIDocumentInteractionController and delegate
 
 RCT_EXPORT_METHOD(openDocument:(NSString*)uri scheme:(NSString *)scheme resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)

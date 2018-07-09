@@ -23,6 +23,16 @@ function previewDocument(path:string, scheme:string) {
   else
     return Promise.reject('RNFetchBlob.openDocument only supports IOS.')
 }
+/**
+ * Close document interaction menu
+ */
+function dismissMenu() {
+  if(Platform.OS === 'ios') {
+    return RNFetchBlob.dismissMenu();
+  }
+  else
+    return Promise.reject('RNFetchBlob.dismissMenu only supports IOS.')
+}
 
 /**
  * Preview a file using UIDocumentInteractionController
@@ -50,5 +60,6 @@ function excludeFromBackupKey(path:string) {
 export default {
   openDocument,
   previewDocument,
+  dismissMenu,
   excludeFromBackupKey
 }
