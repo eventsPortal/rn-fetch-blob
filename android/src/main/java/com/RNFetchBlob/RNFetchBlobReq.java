@@ -513,7 +513,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
                         // binary data
                         catch(CharacterCodingException ignored) {
                             if(responseFormat == ResponseFormat.UTF8) {
-                                callback.invoke(null, RNFetchBlobConst.RNFB_RESPONSE_UTF8, "");
+                                callback.invoke(null, RNFetchBlobConst.RNFB_RESPONSE_UTF8, new String(b));
                             }
                             else {
                                 callback.invoke(null, RNFetchBlobConst.RNFB_RESPONSE_BASE64, android.util.Base64.encodeToString(b, Base64.NO_WRAP));
