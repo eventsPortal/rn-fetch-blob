@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 import android.util.SparseArray;
 
 import com.facebook.react.bridge.ActivityEventListener;
@@ -28,7 +28,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.JavaNetCookieJar;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -118,8 +117,12 @@ public class RNFetchBlob extends ReactContextBaseJavaModule {
                         .setDataAndType(uriForFile, mime);
 
                 // Set flag to give temporary permission to external app to use FileProvider
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                 // All the activity to be opened outside of an activity
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+                // All the activity to be opened outside of an activity
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 // Validate that the device can open the file
                 PackageManager pm = getCurrentActivity().getPackageManager();
                 if (intent.resolveActivity(pm) != null) {
@@ -372,6 +375,11 @@ public class RNFetchBlob extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addCompleteDownload (ReadableMap config, Promise promise) {
         DownloadManager dm = (DownloadManager) RCTContext.getSystemService(RCTContext.DOWNLOAD_SERVICE);
+        if (config == null || !config.hasKey("path"))
+        {
+            promise.reject("EINVAL", "RNFetchblob.addCompleteDownload config or path missing.");
+            return;
+        }
         String path = RNFetchBlobFS.normalizePath(config.getString("path"));
         if(path == null) {
             promise.reject("EINVAL", "RNFetchblob.addCompleteDownload can not resolve URI:" + config.getString("path"));

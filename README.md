@@ -1,13 +1,11 @@
-# New Releases
-In order to publish new releases from this fork, we have renamed this project to
-`rn-fetch-blob` and published to `https://www.npmjs.com/package/rn-fetch-blob`.
-
 # rn-fetch-blob
 [![release](https://img.shields.io/github/release/joltup/rn-fetch-blob.svg?style=flat-square)](https://github.com/joltup/rn-fetch-blob/releases) [![npm](https://img.shields.io/npm/v/rn-fetch-blob.svg?style=flat-square)](https://www.npmjs.com/package/rn-fetch-blob) ![](https://img.shields.io/badge/PR-Welcome-brightgreen.svg?style=flat-square) [![](https://img.shields.io/badge/Wiki-Public-brightgreen.svg?style=flat-square)](https://github.com/joltup/rn-fetch-blob/wiki) [![npm](https://img.shields.io/npm/l/rn-fetch-blob.svg?maxAge=2592000&style=flat-square)]()
 
-
 A project committed to making file access and data transfer easier and more efficient for React Native developers.
-> For Firebase Storage solution, please upgrade to the latest version for the best compatibility.
+
+# Version Compatibility Warning
+
+rn-fetch-blob version 0.10.16 is only compatible with react native 0.60 and up. It should have been a major version bump, we apologize for the mistake. If you are not yet upgraded to react native 0.60 or above, you should remain on rn-fetch-blob version 0.10.15
 
 ## Features
 - Transfer data directly from/to storage without BASE64 bridging
@@ -22,7 +20,7 @@ A project committed to making file access and data transfer easier and more effi
 * [Installation](#user-content-installation)
 * [HTTP Data Transfer](#user-content-http-data-transfer)
  * [Regular Request](#user-content-regular-request)
- * [Download file](#user-content-download-example--fetch-files-that-needs-authorization-token)
+ * [Download file](#download-example-fetch-files-that-need-authorization-token)
  * [Upload file](#user-content-upload-example--dropbox-files-upload-api)
  * [Multipart/form upload](#user-content-multipartform-data-example--post-form-data-with-file-and-data)
  * [Upload/Download progress](#user-content-uploaddownload-progress)
@@ -69,7 +67,7 @@ After `0.10.3` you can install this package directly from Github
 
 ```sh
 # replace <branch_name> with any one of the branches
-npm install --save github:joltup/rn-fetch-blob-package#<branch_name>
+npm install --save github:joltup/rn-fetch-blob#<branch_name>
 ```
 
 **Manually Link Native Modules**
@@ -81,7 +79,7 @@ If automatically linking doesn't work for you, see instructions on [manually lin
 For 0.29.2+ projects, simply link native packages via the following command (note: rnpm has been merged into react-native)
 
 ```
-react-native link
+react-native link rn-fetch-blob
 ```
 
 As for projects < 0.29 you need `rnpm` to link native packages
@@ -93,7 +91,7 @@ rnpm link
 Optionally, use the following command to add Android permissions to `AndroidManifest.xml` automatically
 
 ```sh
-RNFB_ANDROID_PERMISSIONS=true react-native link
+RNFB_ANDROID_PERMISSIONS=true react-native link rn-fetch-blob
 ```
 
 pre 0.29 projects
@@ -120,7 +118,7 @@ If you're going to access external storage (say, SD card storage) for `Android 5
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 +   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />                                               
 +   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />                                              
-
++   <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     ...
 
 ```
@@ -180,7 +178,7 @@ To sum up:
 
 ### Download example: Fetch files that need authorization token
 
-Most simple way is download to memory and stored as BASE64 encoded string, this is handy when the response data is small.
+Most simple way is download to memory and stored as BASE64 encoded string, this is handy when the response data is small. Note that when it comes to authorization, not only can you use an authorization token, but this package will automatically pass the cookies created by normal js requests such as axios and fetch. Therefore, if you are using traditional cookie-based ways to authorize your user, you don't need to do anything before this package works.
 
 ```js
 
@@ -528,7 +526,7 @@ RNFetchBlob
     })
 ```
 
-Your app might not have right to remove/change the file created by Download Manager, therefore you might need to [set custom location to the download task](https://github.com/joltup/rn-fetch-blob/issues/236).
+Your app might not have right to remove/change the file created by Download Manager, therefore you might need to [set custom location to the download task](https://github.com/wkh237/react-native-fetch-blob/issues/236).
 
 **Download Notification and Visibility in Download App (Android Only)**
 
@@ -790,7 +788,7 @@ By default, rn-fetch-blob does NOT allow connection to unknown certification pro
 RNFetchBlob.config({
   trusty : true
 })
-.then('GET', 'https://mysite.com')
+.fetch('GET', 'https://mysite.com')
 .then((resp) => {
   // ...
 })
